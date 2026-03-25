@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuri Boczar - Jack-in-the-Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body class="m-0 bg-transparent">
+    <svg class="block h-auto w-[720px] overflow-visible" viewBox="0 0 720 520" aria-label="Jack-in-the-box animation"></svg>
+
+    <script>
+        const svg = d3.select("svg");
+        const width = 720;
+        const height = 520;
+        const scene = svg.append("g");
+
+        // Grupo do palhaço
+        const clown = scene.append("g")
+            .attr("transform", "translate(360, 320)")
+            .attr("opacity", 0);
+
+            // Cabeça
+            clown.append("circle")
+                .attr("cx", 0)
+                .attr("cy", -114)
+                .attr("r", 46)
+                .attr("fill", "#fff4d6")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4);
+
+            // Olho esquerdo
+            clown.append("circle")
+                .attr("cx", -14)
+                .attr("cy", -120)
+                .attr("r", 5)
+                .attr("fill", "#22191a");
+
+            // Olho direito
+            clown.append("circle")
+                .attr("cx", 14)
+                .attr("cy", -120)
+                .attr("r", 5)
+                .attr("fill", "#22191a");
+
+            // Nariz
+            clown.append("circle")
+                .attr("cx", 0)
+                .attr("cy", -105)
+                .attr("r", 7)
+                .attr("fill", "#d94b3d");
+
+            // Sorriso
+            clown.append("path")
+                .attr("d", "M-18 -92 Q0 -76 18 -92")
+                .attr("fill", "none")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4)
+                .attr("stroke-linecap", "round");
+
+            // Chapéu
+            clown.append("path")
+                .attr("d", "M-34 -154 L0 -194 L34 -154 Z")
+                .attr("fill", "#efb347")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4)
+                .attr("stroke-linejoin", "round");
+
+            // Pompom
+            clown.append("circle")
+                .attr("cx", 0)
+                .attr("cy", -194)
+                .attr("r", 7)
+                .attr("fill", "#d94b3d")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4);
+
+            // Corpo
+            clown.append("rect")
+                .attr("x", -42)
+                .attr("y", -68)
+                .attr("width", 84)
+                .attr("height", 72)
+                .attr("rx", 18)
+                .attr("fill", "#2f847c")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4);
+
+            // Mola do corpo
+         clown.append("path")
+                .attr("d", [
+                    "M 0 4",
+                    "C -10 0, -10 12, 0 18",
+                    "C 10 24, 10 36, 0 42",
+                    "C -10 48, -10 60, 0 66",
+                    "C 10 72, 10 84, 0 90",
+                    "C -10 96, -10 108, 0 114"
+                ].join(" "))
+                .attr("fill", "none")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4)
+                .attr("stroke-linecap", "round")
+                .attr("stroke-linejoin", "round");
+
+        // Grupo 1 da caixa
+        const box = scene.append("g")
+            .attr("transform", "translate(360, 336)");
+
+            // caixa
+            box.append("rect")
+                .attr("x", -122)
+                .attr("y", -2)
+                .attr("width", 244)
+                .attr("height", 84)
+                .attr("rx", 14)
+                .attr("fill", "#c53d34")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 5);
+
+            // Faixa vertical
+            box.append("rect")
+                .attr("x", -24)
+                .attr("y", -2)
+                .attr("width", 48)
+                .attr("height", 84)
+                .attr("fill", "#fff4d6")
+                .attr("opacity", 0.9);
+
+            // Faixa horizontal
+            box.append("rect")
+                .attr("x", -122)
+                .attr("y", 24)
+                .attr("width", 244)
+                .attr("height", 16)
+                .attr("fill", "#efb347")
+                .attr("opacity", 0.85);
+
+        // Tampa
+        const lid = box.append("g")
+            .attr("transform", "translate(0, -2)");
+
+            // corpo da tampa
+            lid.append("rect")
+                .attr("x", -132)
+                .attr("y", -28)
+                .attr("width", 264)
+                .attr("height", 28)
+                .attr("rx", 10)
+                .attr("fill", "#2f847c")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 5);
+
+            // Botão
+            lid.append("circle")
+                .attr("cx", 0)
+                .attr("cy", -14)
+                .attr("r", 9)
+                .attr("fill", "#fff4d6")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 4);
+
+            // Manivela
+            const handle = box.append("g")
+                .attr("transform", "translate(124, 38)");
+
+            // Haste
+            handle.append("line")
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 34)
+                .attr("y2", -16)
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 6)
+                .attr("stroke-linecap", "round");
+
+            // Ponta da manivela
+            handle.append("circle")
+                .attr("cx", 42)
+                .attr("cy", -20)
+                .attr("r", 14)
+                .attr("fill", "#efb347")
+                .attr("stroke", "#22191a")
+                .attr("stroke-width", 5);
+
+        const hoverTarget = box.append("rect")
+            .attr("class", "cursor-pointer")
+            .attr("x", -140)
+            .attr("y", -40)
+            .attr("width", 320)
+            .attr("height", 150)
+            .attr("fill", "transparent");
+
+        let isOpen = false;
+        let isAnimating = false;
+
+        function animateJack(open) {
+            if (isAnimating || open === isOpen) {
+                return;
+            }
+
+            isAnimating = true;
+            const lidAngle = open ? -90 : 0;
+            const jackY = open ? 238 : 320;
+            const clownTilt = open ? -4 : 0;
+            const handleAngle = open ? 22 : 0;
+
+            lid.interrupt()
+                .transition()
+                .duration(420)
+                .ease(d3.easeBackOut.overshoot(1.2))
+                .attrTween("transform", () => {
+                    const start = isOpen ? -90 : 0;
+                    const interpolate = d3.interpolateNumber(start, lidAngle);
+                    return t => `translate(0, -2) rotate(${interpolate(t)}, -110, 0)`;
+                });
+
+            clown.interrupt()
+                .transition()
+                .duration(open ? 520 : 320)
+                .ease(open ? d3.easeElasticOut.amplitude(1).period(0.4) : d3.easeCubicInOut)
+                .attr("transform", `translate(360, ${jackY}) rotate(${clownTilt})`)
+                .attr("opacity", open ? 1 : 0)
+                .on("end", () => {
+                    isOpen = open;
+                    isAnimating = false;
+                });
+
+            handle.interrupt()
+                .transition()
+                .duration(380)
+                .ease(d3.easeSinOut)
+                .attrTween("transform", () => {
+                    const start = isOpen ? 22 : 0;
+                    const interpolate = d3.interpolateNumber(start, handleAngle);
+                    return t => `translate(124, 38) rotate(${interpolate(t)})`;
+                })
+                .transition()
+                .duration(240)
+                .ease(d3.easeSinInOut)
+                .attr("transform", "translate(124, 38) rotate(0)");
+        }
+
+        hoverTarget
+            .on("mouseenter", () => animateJack(true))
+            .on("mouseleave", () => animateJack(false));
+    </script>
+</body>
+</html>
