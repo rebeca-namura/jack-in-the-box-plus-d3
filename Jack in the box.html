@@ -174,7 +174,8 @@
 
         // Manivela
         const handle = box.append("g")
-            .attr("transform", "translate(124, 38)");
+            .attr("transform", "translate(124, 38)")
+            .attr("class", "cursor-pointer");
 
         // Haste
         handle.append("line")
@@ -195,37 +196,23 @@
             .attr("stroke", "#22191a")
             .attr("stroke-width", 5);
 
-        const hoverTarget = box.append("rect")
-            .attr("class", "cursor-pointer")
-            .attr("x", -140)
-            .attr("y", -40)
-            .attr("width", 320)
-            .attr("height", 150)
-            .attr("fill", "transparent");
-
-        let isOpen = false;
-        let isAnimating = false;
+        let targetState = false;
 
         function animateJack(open) {
-            if (isAnimating || open === isOpen) {
+            if (open === targetState) {
                 return;
             }
+            targetState = open;
 
-            isAnimating = true;
             const lidAngle = open ? -90 : 0;
             const jackY = open ? 238 : 320;
             const clownTilt = open ? -4 : 0;
-            const handleAngle = open ? 22 : 0;
 
             lid.interrupt()
                 .transition()
                 .duration(420)
                 .ease(d3.easeBackOut.overshoot(1.2))
-                .attrTween("transform", () => {
-                    const start = isOpen ? -90 : 0;
-                    const interpolate = d3.interpolateNumber(start, lidAngle);
-                    return t => `translate(0, -2) rotate(${interpolate(t)}, -110, 0)`;
-                });
+                .attr("transform", `translate(0, -2) rotate(${lidAngle}, -110, 0)`);
 
             clown.interrupt()
                 .transition()
@@ -248,35 +235,29 @@
                             .ease(d3.easeCubicInOut)
                             .call(zoom.transform, d3.zoomIdentity.scale(1).translate(0, 0));
                     }
-                })
-                .on("end", () => {
-                    isOpen = open;
-                    isAnimating = false;
                 });
-
-            handle.interrupt()
-                .transition()
-                .duration(380)
-                .ease(d3.easeSinOut)
-                .attrTween("transform", () => {
-                    const start = isOpen ? 22 : 0;
-                    const interpolate = d3.interpolateNumber(start, handleAngle);
-                    return t => `translate(124, 38) rotate(${interpolate(t)})`;
-                })
-                .transition()
-                .duration(240)
-                .ease(d3.easeSinInOut)
-                .attr("transform", "translate(124, 38) rotate(0)");
         }
 
-        // Se não há zoom, anima diretamente
-        if (!open && !isOpen) {
-            animateBoxAndClown();
-        }
+        let dragStartY = 0;
+        let currentAngle = 0;
+        const drag = d3.drag()
+            .on("start", (event) => {
+                dragStartY = event.y - currentAngle;
+            })
+            .on("drag", (event) => {
+                let dy = event.y - dragStartY;
+                currentAngle = Math.max(0, Math.min(90, dy));
+                
+                handle.attr("transform", `translate(124, 38) rotate(${currentAngle})`);
+                
+                if (currentAngle > 30) {
+                    animateJack(true);
+                } else {
+                    animateJack(false);
+                }
+            });
 
-        hoverTarget
-            .on("mouseenter", () => animateJack(true))
-            .on("mouseleave", () => animateJack(false));
+        handle.call(drag);
     </script>
 </body>
 
