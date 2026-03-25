@@ -16,6 +16,15 @@
         const height = 520;
         const scene = svg.append("g");
 
+        // zoom
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 5])
+            .on("zoom", (event) => {
+                scene.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
         // Grupo do palhaço
         const clown = scene.append("g")
             .attr("transform", "translate(360, 320)")
@@ -221,25 +230,46 @@
                 .ease(open ? d3.easeElasticOut.amplitude(1).period(0.4) : d3.easeCubicInOut)
                 .attr("transform", `translate(360, ${jackY}) rotate(${clownTilt})`)
                 .attr("opacity", open ? 1 : 0)
+                .on("start", function() {
+                    if (open) {
+                        // Zoom automático quando o palhaço começa a aparecer
+                        // Zoom 2x focando no centro da cabeça do palhaço (360, 180)
+                        svg.transition()
+                            .duration(520)
+                            .ease(d3.easeElasticOut.amplitude(1).period(0.4))
+                            .call(zoom.transform, d3.zoomIdentity.scale(1.5).translate(-140, -50));
+                    } else {
+                        // Volta ao zoom normal quando o palhaço some
+                        svg.transition()
+                            .duration(320)
+                            .ease(d3.easeCubicInOut)
+                            .call(zoom.transform, d3.zoomIdentity.scale(1).translate(0, 0));
+                    }
+                })
                 .on("end", () => {
                     isOpen = open;
                     isAnimating = false;
                 });
 
-            handle.interrupt()
-                .transition()
-                .duration(380)
-                .ease(d3.easeSinOut)
-                .attrTween("transform", () => {
-                    const start = isOpen ? 22 : 0;
-                    const interpolate = d3.interpolateNumber(start, handleAngle);
-                    return t => `translate(124, 38) rotate(${interpolate(t)})`;
-                })
-                .transition()
-                .duration(240)
-                .ease(d3.easeSinInOut)
-                .attr("transform", "translate(124, 38) rotate(0)");
-        }
+                handle.interrupt()
+                    .transition()
+                    .duration(380)
+                    .ease(d3.easeSinOut)
+                    .attrTween("transform", () => {
+                        const start = isOpen ? 22 : 0;
+                        const interpolate = d3.interpolateNumber(start, handleAngle);
+                        return t => `translate(124, 38) rotate(${interpolate(t)})`;
+                    })
+                    .transition()
+                    .duration(240)
+                    .ease(d3.easeSinInOut)
+                    .attr("transform", "translate(124, 38) rotate(0)");
+            }
+
+            // Se não há zoom, anima diretamente
+            if (!open && !isOpen) {
+                animateBoxAndClown();
+            }
 
         hoverTarget
             .on("mouseenter", () => animateJack(true))
