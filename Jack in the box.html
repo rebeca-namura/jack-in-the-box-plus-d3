@@ -9,9 +9,44 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
-<body class="m-0 bg-transparent">
-    <svg class="block h-auto w-[720px] overflow-visible" viewBox="0 0 720 520"
-        aria-label="Jack-in-the-box animation"></svg>
+<body class="m-0 min-h-screen overflow-hidden bg-[#f6efe5] text-[#22191a]">
+    <main class="relative min-h-screen w-full">
+        <svg class="absolute inset-0 block h-full w-full overflow-visible bg-[#f6efe5]" viewBox="0 0 720 520"
+            aria-label="Jack-in-the-box animation"></svg>
+
+        <aside class="absolute right-4 top-4 z-10 w-[min(420px,calc(100%-2rem))] rounded-2xl bg-white/82 p-5 shadow-[0_18px_40px_rgba(34,25,26,0.14)] backdrop-blur md:right-6 md:top-6 md:p-6">
+            <div class="space-y-5">
+                <div class="space-y-2">
+                    <p class="block text-sm font-semibold uppercase tracking-[0.2em] text-[#c53d34]">
+                        Título
+                    </p>
+                    <h1 class="rounded-xl px-3 text-xl font-semibold text-[#2f847c] leading-tight">
+                        Jack in the Box
+                    </h1>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="block text-sm font-semibold uppercase tracking-[0.2em] text-[#c53d34]">
+                        Como funciona?
+                    </p>
+                    <p class="rounded-xl px-4 text-base leading-relaxed">
+                        Arraste a alavanca para baixo para interagir com a caixinha.
+                    </p>
+
+                </div>
+                    <div class="space-y-2">
+                    <p class="block text-sm font-semibold uppercase tracking-[0.2em] text-[#c53d34]">
+                        Autores
+                    </p>
+                    <div class="space-y-0.2">
+                    <p class="mr-2 w-fit rounded-xl px-4 text-base leading-relaxed">
+                        Yuri Boczar, Rebeca Namura & Marcus Valente
+                    </p>
+
+                </div>
+            </div>
+        </aside>
+    </main>
 
     <script>
         const svg = d3.select("svg");
