@@ -227,7 +227,7 @@
                         svg.transition()
                             .duration(520)
                             .ease(d3.easeElasticOut.amplitude(1).period(0.4))
-                            .call(zoom.transform, d3.zoomIdentity.scale(1.5).translate(-140, -50));
+                            .call(zoom.transform, d3.zoomIdentity.scale(1.5).translate(-140, 0));
                     } else {
                         // Volta ao zoom normal quando o palhaço some
                         svg.transition()
@@ -242,14 +242,16 @@
         let currentAngle = 0;
         const drag = d3.drag()
             .on("start", (event) => {
-                dragStartY = event.y - currentAngle;
+                const pointerY = event.sourceEvent.clientY || (event.sourceEvent.touches ? event.sourceEvent.touches[0].clientY : 0);
+                dragStartY = pointerY - currentAngle;
             })
             .on("drag", (event) => {
-                let dy = event.y - dragStartY;
+                const pointerY = event.sourceEvent.clientY || (event.sourceEvent.touches ? event.sourceEvent.touches[0].clientY : 0);
+                let dy = pointerY - dragStartY;
                 currentAngle = Math.max(0, Math.min(90, dy));
-                
+
                 handle.attr("transform", `translate(124, 38) rotate(${currentAngle})`);
-                
+
                 if (currentAngle > 30) {
                     animateJack(true);
                 } else {
